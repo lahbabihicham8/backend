@@ -16,6 +16,8 @@ You are implementing the Khafeefa DTC ecommerce store. Read every file in docs/ 
 - docs/08-google-sheets.md
 - docs/09-deployment-env-docker.md
 - docs/10-testing-qa.md
+- docs/12-arabic-copy-cro-bank.md
+- docs/13-coding-rules.md
 
 Build a production-ready repo with:
 
@@ -24,14 +26,21 @@ Build a production-ready repo with:
    - Premium branded design for خفيفة / khafeefa.
    - Pages: home, product landing page, collections, about, contact, thank-you, privacy, terms, refund policy, shipping policy.
    - Product: مروحة خفيفة للخصر مع باور بانك.
+   - Product source specs from Alibaba page:
+     - 4000mAh battery
+     - USB rechargeable / power-bank feature
+     - 5 wind speeds
+     - button control
+     - 5V / 5W
+     - approx. 88 x 115 x 53 mm
+     - supplier-listed FCC, KC, CE, RoHS certificates must be treated as unverified until owner provides batch documents
    - Offers:
-     - 1 piece: 12.900 KWD
-     - 2 pieces: 22.000 KWD
-     - 3 pieces: 29.500 KWD
+     - 1 piece: 18.900 KWD
+     - Buy 2, get 1 free: 29.900 KWD for 3 total pieces
    - Product CTA adds selected offer to cart and opens cart drawer.
    - Cart drawer has cross-sell carousel placeholders and opens checkout popup.
    - Checkout popup has only name and Kuwait phone.
-   - After successful order, show 10-15 second upsell at 12.900 KWD, then thank-you page.
+   - After successful order, show 10-15 second upsell at 18.900 KWD, then thank-you page.
    - Deferred Meta, TikTok, Snapchat web pixels with event IDs for dedup.
    - Responsive, fast, RTL correct.
 
@@ -39,7 +48,7 @@ Build a production-ready repo with:
    - Python FastAPI, Postgres, SQLAlchemy, Alembic.
    - Endpoints: health, create order, accept upsell, get public order.
    - Server-side price calculation using backend catalog.
-   - Kuwait phone validation and exact test whitelist 055000000.
+   - Kuwait phone validation and test whitelist numbers 55000000, 60000000, 90000000.
    - MaxMind minFraud gate: allow only Kuwait, reject suspicious/VPN/proxy/Tor/high-risk orders.
    - Meta CAPI, TikTok Events API, Snap CAPI server dispatch with SHA-256 hashed phone and shared event IDs.
    - Google Sheets webhook dispatch.
@@ -64,8 +73,10 @@ Important constraints:
 - Do not trust frontend prices.
 - Do not send raw PII in CAPI server payloads.
 - Use Decimal for KWD money.
-- Confirm the Postgres DB name mismatch before deploy: owner says khafeefa, provided URL ends with /namabeauty.
+- Use backend `DATABASE_URL=postgres://hicham:hicham.1lahbabi@getkhafeefa_database:5432/getkhafeefa?sslmode=disable` in environment variables.
+- Use MaxMind minFraud before accepting real orders. Only allow Kuwait IPs, reject VPN/proxy/Tor/hosting/high-risk traffic, and bypass only the three whitelisted test phones.
 - Keep placeholder reviews/images clearly replaceable. Do not present fake reviews as real in code comments/content data.
+- Use the placeholder reviews in docs/12-arabic-copy-cro-bank.md only as seed UI content marked as placeholders until real customer reviews are available.
 - Implement tests described in docs/10-testing-qa.md.
 
 Start by creating the repo structure, then implement frontend and backend in small commits/steps.

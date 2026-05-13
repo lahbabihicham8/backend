@@ -104,6 +104,7 @@ Use sample placeholders now and make them easy to replace later:
   - Product on waist/belt.
   - Charging phone.
   - Packaging/what is in the box.
+  - Speed/control close-up showing `5 سرعات`.
 - Collection card.
 - About page brand/process image.
 

@@ -93,8 +93,8 @@ Sections:
    - Review cards.
 
 8. Offer block:
-   - 1, 2, 3 piece offers.
-   - Push 3-piece as `أفضل قيمة للعائلة`.
+   - 1-piece offer and `Buy 2, get 1 free` bundle.
+   - Push the 3-piece bundle as `الأكثر طلباً` and `أفضل قيمة للعائلة`.
 
 9. FAQ:
    - Kuwait number/COD/delivery.
@@ -119,11 +119,10 @@ Required sections:
    - Subtitle: `هواء قريب منك + شحن للطوارئ في جهاز واحد، مصمم لمشاوير الكويت والحر اليومي.`
    - Stars and review count placeholder.
    - Offers:
-     - 1 piece: `12.900 د.ك`
-     - 2 pieces: `22.000 د.ك`
-     - 3 pieces: `29.500 د.ك`
-   - Badge on 3-pack: `أفضل قيمة`
-   - Badge on 2-pack: `الأكثر طلباً`
+     - 1 piece: `18.900 د.ك`
+     - Buy 2, get 1 free: `29.900 د.ك` for 3 total pieces
+   - Badge on bundle: `الأكثر طلباً`
+   - Secondary badge on bundle: `خذ 3 وادفع عن 2`
    - CTA: `أضف العرض وافتح السلة`
    - CTA behavior: add selected offer to cart and open cart drawer.
 
@@ -135,10 +134,13 @@ Required sections:
    - Hands-free airflow.
    - Clip/waist use.
    - Power bank emergency convenience.
+   - 4000mAh battery.
+   - 5 wind speeds.
 
 4. Proof/authority section:
    - `اختبارات خفيفة قبل التغليف`
-   - Airflow check, battery check, clip check, packaging check.
+   - Airflow check across 5 speeds, battery/USB charge check, button check, clip check, packaging check.
+   - Supplier-listed certificates can be shown only after verification for the exact batch/model.
 
 5. Use-case grid:
    - Work.
@@ -218,8 +220,9 @@ COD only, two fields:
 Validation:
 
 - Name: 2-80 chars, Arabic/English spaces allowed.
-- Phone: valid Kuwait mobile number or whitelisted `055000000`.
-- Accept display formats like `50000000`, `+96550000000`, `96550000000`, `055000000` only for whitelist.
+- Phone: valid Kuwait mobile number or whitelisted `55000000`, `60000000`, or `90000000`.
+- Accept display formats like `50000000`, `+96550000000`, `96550000000`.
+- The three test numbers are whitelisted even if fraud checks would otherwise block a local test.
 - Normalize real Kuwait phone to `+965XXXXXXXX`.
 
 Popup content:
@@ -248,7 +251,7 @@ After valid initial order, show an upsell for 10-15 seconds.
 Rules:
 
 - This is the only place a product is discounted.
-- Upsell price: `12.900 KWD`.
+- Upsell price: `18.900 KWD`.
 - User can accept or skip.
 - Accept should call backend to append upsell item to existing order.
 - If timer ends, continue to thank-you.
@@ -256,7 +259,7 @@ Rules:
 Copy:
 
 `عرض خاص لطلبك فقط`
-`أضف قطعة ثانية بسعر 12.900 د.ك قبل تجهيز الطلب.`
+`أضف قطعة إضافية بسعر خاص 18.900 د.ك قبل تجهيز الطلب.`
 
 ## Thank You Page
 

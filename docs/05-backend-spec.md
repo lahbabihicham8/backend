@@ -63,7 +63,7 @@ API_BASE_URL=https://api.getkhafeefa.shop
 FRONTEND_ORIGIN=https://getkhafeefa.shop
 CORS_ORIGINS=https://getkhafeefa.shop
 
-DATABASE_URL=postgres://khafeefa:khafeefa@khafeefa_database:5432/namabeauty?sslmode=disable
+DATABASE_URL=postgres://hicham:hicham.1lahbabi@getkhafeefa_database:5432/getkhafeefa?sslmode=disable
 RUN_MIGRATIONS_ON_START=true
 
 ORDER_WEBHOOK_URL=
@@ -73,8 +73,9 @@ MAXMIND_ACCOUNT_ID=
 MAXMIND_LICENSE_KEY=
 MAXMIND_MINFRAUD_ENDPOINT=https://minfraud.maxmind.com/minfraud/v2.0/insights
 MAXMIND_MAX_RISK_SCORE=15
-MAXMIND_ALLOW_TEST_PHONE=055000000
+MAXMIND_ALLOW_TEST_PHONES=55000000,60000000,90000000
 ALLOW_NON_KUWAIT_IPS=false
+FRAUD_API_FAILURE_MODE=reject
 
 META_PIXEL_ID=
 META_ACCESS_TOKEN=
@@ -106,7 +107,7 @@ Responsibilities:
 
 1. Validate request schema.
 2. Normalize and validate Kuwait phone.
-3. Allow whitelisted `055000000` for test orders.
+3. Allow whitelisted `55000000`, `60000000`, and `90000000` for test orders.
 4. Recalculate cart totals server-side from catalog.
 5. Extract client IP from trusted proxy headers.
 6. Run MaxMind minFraud unless test phone.
@@ -124,7 +125,7 @@ Response:
   "order_number": "KH-2026-000001",
   "status": "pending_confirmation",
   "currency": "KWD",
-  "total": 22.0,
+  "total": 29.9,
   "event_id": "uuid",
   "upsell_expires_in_seconds": 15
 }
@@ -137,7 +138,7 @@ Adds the post-order upsell item if within valid time window.
 Rules:
 
 - Only available after a successful initial order.
-- Price is `12.900 KWD`.
+- Price is `18.900 KWD`.
 - Only one upsell acceptance per order.
 - Update order total and items.
 - Send update webhook to Google Sheets.
@@ -209,10 +210,19 @@ Keep V1 catalog in backend code/config, not in frontend only.
 
 Offer totals:
 
-- `one`: quantity 1, total `12.900`.
-- `two`: quantity 2, total `22.000`.
-- `three`: quantity 3, total `29.500`.
-- `post_order_upsell`: quantity 1, total `12.900`.
+- `one`: quantity 1, paid quantity 1, free quantity 0, total `18.900`.
+- `buy2get1`: quantity 3, paid quantity 2, free quantity 1, total `29.900`.
+- `post_order_upsell`: quantity 1, total `18.900`.
+
+Product specs to expose through backend catalog if needed:
+
+- Battery: `4000mAh`.
+- Wind speeds: `5`.
+- Charging: USB rechargeable.
+- Voltage/power: `5V`, `5W`.
+- Dimensions: `88 x 115 x 53 mm`.
+- Public working-time copy: `حتى 8 ساعات حسب السرعة وطريقة الاستخدام`.
+- Supplier-listed certificates: FCC, KC, CE, RoHS. Store these internally as unverified until actual certificates for the sold batch are available.
 
 Use Decimal for money, never binary float in calculations.
 

@@ -93,10 +93,20 @@ export const products = [
     cardTitle: "مروحة خصر وباور بانك",
     subtitle: "هواء قريب منك + شحن للطوارئ في جهاز واحد، مصمم لمشاوير الكويت والحر اليومي.",
     currency: "KWD",
+    specs: {
+      batteryMah: 4000,
+      windSpeeds: 5,
+      charging: "USB",
+      voltage: "5V",
+      power: "5W",
+      dimensionsMm: "88 x 115 x 53",
+      material: "Plastic",
+      controls: "Button",
+      workingTimeNote: "حتى 8 ساعات حسب السرعة وطريقة الاستخدام"
+    },
     offers: [
-      { id: "one", quantity: 1, price: 12.9, label: "قطعة واحدة" },
-      { id: "two", quantity: 2, price: 22.0, label: "قطعتين", badge: "الأكثر طلباً" },
-      { id: "three", quantity: 3, price: 29.5, label: "ثلاث قطع", badge: "أفضل قيمة" }
+      { id: "one", quantity: 1, paidQuantity: 1, freeQuantity: 0, price: 18.9, label: "قطعة واحدة" },
+      { id: "buy2get1", quantity: 3, paidQuantity: 2, freeQuantity: 1, price: 29.9, label: "خذ 3 وادفع عن 2", badge: "الأكثر طلباً" }
     ]
   }
 ];
@@ -108,14 +118,14 @@ export const products = [
 - Cart drawer CTA opens checkout modal.
 - Cross-sell carousel must support products later, but V1 can show disabled placeholders.
 - Cart state should persist in `localStorage`.
-- All prices display with 3 decimals for KWD: `12.900 د.ك`.
+- All prices display with 3 decimals for KWD: `18.900 د.ك`.
 
 ## Checkout Flow
 
 Client-side steps:
 
 1. Validate name and phone.
-2. Normalize Kuwait phone to `+965XXXXXXXX` except whitelist test number can remain marked as test.
+2. Normalize Kuwait phone to `+965XXXXXXXX`; the three whitelisted test numbers can be marked as test orders.
 3. Create a unique `event_id` for InitiateCheckout and Purchase attempts.
 4. POST to `POST /v1/orders`.
 5. On success:
@@ -128,7 +138,7 @@ Phone validation:
 
 - Kuwait mobile numbers are 8 digits and commonly start with `5`, `6`, or `9`.
 - Accept `+965XXXXXXXX`, `965XXXXXXXX`, `XXXXXXXX`.
-- The explicit test whitelist is `055000000`.
+- Explicit test whitelist: `55000000`, `60000000`, `90000000`.
 - Client validation helps UX; backend is source of truth.
 
 ## API Calls
@@ -142,15 +152,11 @@ Create order request:
   "items": [
     {
       "product_id": "khafeefa-waist-fan-powerbank",
-      "offer_id": "two",
-      "quantity": 2,
-      "unit_price": 11.0,
-      "total_price": 22.0
+      "offer_id": "buy2get1",
+      "quantity": 3
     }
   ],
   "currency": "KWD",
-  "subtotal": 22.0,
-  "total": 22.0,
   "payment_method": "COD",
   "event_id": "uuid",
   "landing_page_url": "https://getkhafeefa.shop/products/waist-fan-powerbank",

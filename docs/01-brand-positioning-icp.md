@@ -22,7 +22,7 @@ Do not position the store as a marketplace or gadget shop. Position it as a focu
 
 Primary buyer:
 
-- Kuwait women and men, 22-45.
+- Kuwait women and men, 22-45, with copy that also feels natural to KSA/Gulf shoppers who trust practical premium brands.
 - Arabic-first, social commerce buyers.
 - Used to Snapchat/TikTok discovery.
 - Comfortable with COD.
@@ -66,7 +66,7 @@ Forbidden:
 
 ## Copy Tone
 
-Use GCC/Kuwait-friendly Arabic. Since the user asked for KSA dialect too, keep language understandable across Gulf Arabic, but prioritize Kuwait purchase trust.
+Use GCC/Kuwait-friendly Arabic with a Saudi-friendly direct-response rhythm. Prioritize Kuwait trust signals because delivery, COD, and phone validation are Kuwait-only, but avoid hyper-local slang that would feel strange to KSA/GCC viewers coming from TikTok or Snapchat ads.
 
 Tone:
 
@@ -112,6 +112,37 @@ Short card subheading:
 
 `خفيفة، عملية، وتخليك جاهز للحر والمشاوير.`
 
+## Product Source Specs
+
+Supplier page used for V1 product reference:
+
+`https://www.alibaba.com/product-detail/2026-New-Design-High-Speed-Outdoor_1601706369158.html`
+
+Supplier-listed product details to use in the implementation:
+
+- Product type: outdoor sports waist fan / portable wearable waist clip fan.
+- Battery: `4000mAh`.
+- Charging/power: USB rechargeable, 5V, 5W.
+- Use time: supplier lists `> 8 h`; public copy should say `حتى 8 ساعات حسب السرعة وطريقة الاستخدام` unless tested locally.
+- Wind speeds: supplier lists `Five`; public copy can say `5 سرعات هواء`.
+- Control: button control.
+- Material: plastic.
+- Size: `88 x 115 x 53 mm`.
+- Package: color box.
+- Applications: car, outdoor, garage, household, RV, commercial/outdoor work.
+- Supplier mentions custom logo availability, but V1 should use Khafeefa-branded packaging/mockups only when actually produced.
+
+Supplier-listed certifications:
+
+- FCC.
+- KC.
+- CE.
+- RoHS.
+
+Certification rule:
+
+Do not display these as final store badges until the owner has matching certificates for the exact batch/model being sold. In code/content, label them as `supplier-listed certificates to verify`. Once verified, use cautious copy such as `شهادات مطابقة المورد متوفرة للدفعة` instead of implying Kuwait government approval.
+
 ## Social Proof Rules
 
 Until real UGC exists, use placeholders clearly marked in code/content as demo:
@@ -127,6 +158,15 @@ Real proof to collect:
 - Product photo/video.
 - Delivery confirmation.
 - Customer objection solved: airflow, battery, comfort, COD, delivery.
+
+Seed review examples for UI placeholders only:
+
+- `ن. أ. - السالمية`: `أكثر شي عجبني إنها تثبت على الخصر وما أحتاج أمسكها بيدي. مناسبة للمشاوير.`
+- `م. ف. - حولي`: `أخذت عرض الثلاث قطع، وحدة للسيارة ووحدة للدوام ووحدة للبيت.`
+- `س. ع. - الجهراء`: `الهواء ممتاز على السرعات العالية، وحلو إن فيها شحن للطوارئ.`
+- `خ. م. - الفروانية`: `طلبت بالدفع عند الاستلام، التجربة سهلة والمنتج عملي للحر.`
+
+These are copy placeholders. Do not present them as real reviews until replaced by real customer proof.
 
 ## Trust Badges
 

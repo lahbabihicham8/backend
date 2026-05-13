@@ -75,14 +75,14 @@ Backend:
 - Domain: `api.getkhafeefa.shop`
 - Port: `8000`
 - Env from `backend/.env.example`.
-- Database internal host: `khafeefa_database`.
+- Database internal host: `getkhafeefa_database`.
+- Database name: `getkhafeefa`.
+- Database URL: `postgres://hicham:hicham.1lahbabi@getkhafeefa_database:5432/getkhafeefa?sslmode=disable`
 
 Database:
 
 - Already installed by owner.
-- Confirm DB name mismatch before deploy:
-  - User says DB name is `khafeefa`.
-  - Provided URL ends with `/namabeauty`.
+- Store the database URL in backend environment variables only.
 
 ## DNS
 

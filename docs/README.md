@@ -8,10 +8,10 @@ Domains:
 
 - Frontend: `https://getkhafeefa.shop`
 - Backend API: `https://api.getkhafeefa.shop`
-- Database name: `khafeefa`
-- Provided internal Postgres URL: `postgres://khafeefa:khafeefa@khafeefa_database:5432/namabeauty?sslmode=disable`
+- Database name: `getkhafeefa`
+- Backend Postgres URL: `postgres://hicham:hicham.1lahbabi@getkhafeefa_database:5432/getkhafeefa?sslmode=disable`
 
-Important: the connection string database segment currently says `namabeauty`. Confirm whether the real Postgres database is `khafeefa` or `namabeauty` before deploy. Do not silently change production data.
+Keep the real `DATABASE_URL` in `backend/.env`; do not commit production credentials.
 
 ## Required Deliverable
 
@@ -36,17 +36,18 @@ Read in this order:
 8. `08-google-sheets.md`
 9. `09-deployment-env-docker.md`
 10. `10-testing-qa.md`
-11. `11-ai-coder-prompt.md`
+11. `12-arabic-copy-cro-bank.md`
+12. `13-coding-rules.md`
+13. `11-ai-coder-prompt.md`
 
 ## V1 Product
 
 - Arabic name: `مروحة خصر وباور بانك في جهاز واحد`
 - SKU: `khafeefa-waist-fan-powerbank`
-- Offer 1: `12.900 KWD` for 1 piece
-- Offer 2: `22.000 KWD` for 2 pieces
-- Offer 3: `29.500 KWD` for 3 pieces
+- Offer 1: `18.900 KWD` for 1 piece
+- Offer 2: `29.900 KWD` for 3 pieces total, positioned as `Buy 2, get 1 free`
 
-COD only. Checkout collects only name and phone number. The backend must only accept valid Kuwait numbers, with `055000000` whitelisted for production testing.
+COD only. Checkout collects only name and phone number. The backend must only accept valid Kuwait mobile numbers and Kuwait IPs that pass MaxMind minFraud checks. Test phones `55000000`, `60000000`, and `90000000` are whitelisted for production testing.
 
 ## Core Strategy
 

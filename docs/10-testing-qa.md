@@ -23,7 +23,7 @@ Required:
 - Kuwait phone validation:
   - accepts `50000000`, `+96550000000`, `96550000000`.
   - rejects non-Kuwait numbers.
-  - accepts exact whitelist `055000000`.
+  - accepts whitelist numbers `55000000`, `60000000`, `90000000`.
 - Order total recalculation.
 - MaxMind decision rules.
 - CAPI hashing:
@@ -39,7 +39,7 @@ Required:
 2. Add to cart opens cart drawer.
 3. Cart checkout opens modal.
 4. Invalid Kuwait phone blocks submit.
-5. Whitelisted `055000000` can place test order.
+5. Whitelisted `55000000`, `60000000`, and `90000000` can place test orders.
 6. Successful order shows upsell modal for 10-15 seconds.
 7. Accept upsell updates order total.
 8. Skip upsell goes to thank-you.
@@ -87,5 +87,5 @@ Test with mocked MaxMind responses:
 - `is_public_proxy=true`: reject.
 - `risk_score=20`: reject if threshold is 15.
 - MaxMind API failure: follow configured failure mode.
-- Test phone `055000000`: allow.
+- Test phones `55000000`, `60000000`, `90000000`: allow.
 

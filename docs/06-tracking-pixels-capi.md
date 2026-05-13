@@ -103,11 +103,11 @@ Payload example:
       },
       "custom_data": {
         "currency": "KWD",
-        "value": 22.0,
+        "value": 29.9,
         "content_ids": ["khafeefa-waist-fan-powerbank"],
         "content_type": "product",
         "contents": [
-          { "id": "khafeefa-waist-fan-powerbank", "quantity": 2, "item_price": 11.0 }
+          { "id": "khafeefa-waist-fan-powerbank", "quantity": 3, "item_price": 9.9667 }
         ],
         "order_id": "KH-2026-000001"
       }
@@ -139,14 +139,14 @@ Use the current TikTok Business API docs while implementing, but the service sho
       },
       "properties": {
         "currency": "KWD",
-        "value": 22.0,
+        "value": 29.9,
         "content_type": "product",
         "contents": [
           {
             "content_id": "khafeefa-waist-fan-powerbank",
             "content_name": "مروحة خفيفة للخصر مع باور بانك",
-            "quantity": 2,
-            "price": 11.0
+            "quantity": 3,
+            "price": 9.9667
           }
         ],
         "order_id": "KH-2026-000001"
@@ -188,11 +188,11 @@ Payload example:
       },
       "custom_data": {
         "currency": "KWD",
-        "value": 22.0,
+        "value": 29.9,
         "content_ids": ["khafeefa-waist-fan-powerbank"],
         "content_name": "مروحة خفيفة للخصر مع باور بانك",
         "content_type": "product",
-        "num_items": "2",
+        "num_items": "3",
         "order_id": "KH-2026-000001"
       }
     }

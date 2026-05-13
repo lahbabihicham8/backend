@@ -8,7 +8,7 @@ Only allow orders that look like real Kuwait COD orders:
 - IP geolocated to Kuwait.
 - Not suspicious.
 - Not anonymous VPN/proxy/Tor/hosting/residential proxy.
-- Test number `055000000` is whitelisted so production tests can pass.
+- Test numbers `55000000`, `60000000`, and `90000000` are whitelisted so production tests can pass.
 
 ## MaxMind Product
 
@@ -45,7 +45,7 @@ Do not trust frontend-sent IP.
 
 Bypass rules:
 
-- If normalized raw input equals `055000000`, allow as test order.
+- If the normalized local phone equals `55000000`, `60000000`, or `90000000`, allow as test order.
 - Mark `phone_is_test_whitelisted=true`.
 - Still store IP and tracking data, but do not block.
 
@@ -98,19 +98,20 @@ Rejected:
 
 Whitelist:
 
-- Exact test input `055000000`.
-- Also allow normalized variants only if explicitly desired. Default: exact raw input only to avoid accidentally allowing fake patterns.
+- Test inputs `55000000`, `60000000`, `90000000`.
+- Also allow formatted variants that normalize to those local 8 digits, such as `+96555000000`.
+- Keep the whitelist limited to these three numbers to avoid accidentally allowing fake patterns.
 
 ## Implementation Pseudocode
 
 ```python
 def validate_order_region(phone_raw, client_ip, user_agent, order):
-    if phone_raw == settings.MAXMIND_ALLOW_TEST_PHONE:
-        return FraudDecision(allowed=True, reason="TEST_PHONE_WHITELIST")
-
     phone = normalize_kuwait_phone(phone_raw)
     if not phone.valid:
         return FraudDecision(False, "INVALID_KUWAIT_PHONE")
+
+    if phone.local_number in settings.MAXMIND_ALLOW_TEST_PHONES:
+        return FraudDecision(allowed=True, reason="TEST_PHONE_WHITELIST")
 
     result = maxmind.inspect(ip=client_ip, user_agent=user_agent, order=order)
 

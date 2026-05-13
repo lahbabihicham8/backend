@@ -47,8 +47,8 @@ Apps Script checks the secret before writing. This is acceptable because only th
     "phone_raw": "50000000",
     "status": "pending_confirmation",
     "currency": "KWD",
-    "subtotal": "22.000",
-    "total": "22.000",
+    "subtotal": "29.900",
+    "total": "29.900",
     "payment_method": "COD",
     "client_ip": "1.2.3.4",
     "country": "KW",
@@ -65,11 +65,11 @@ Apps Script checks the secret before writing. This is acceptable because only th
   "items": [
     {
       "product_id": "khafeefa-waist-fan-powerbank",
-      "offer_id": "two",
+      "offer_id": "buy2get1",
       "title": "مروحة خفيفة للخصر مع باور بانك",
-      "quantity": 2,
-      "unit_price": "11.000",
-      "total_price": "22.000",
+      "quantity": 3,
+      "unit_price": "9.967",
+      "total_price": "29.900",
       "is_upsell": false
     }
   ]
