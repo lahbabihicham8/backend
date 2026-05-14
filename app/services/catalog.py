@@ -8,19 +8,25 @@ CATALOG = {
                 "quantity": 1,
                 "paid_quantity": 1,
                 "free_quantity": 0,
-                "total_price": Decimal("18.900")
+                "total_price": Decimal("12.900")
             },
-            "buy2get1": {
-                "quantity": 3,
+            "two": {
+                "quantity": 2,
                 "paid_quantity": 2,
-                "free_quantity": 1,
-                "total_price": Decimal("29.900")
+                "free_quantity": 0,
+                "total_price": Decimal("22.000")
+            },
+            "three": {
+                "quantity": 3,
+                "paid_quantity": 3,
+                "free_quantity": 0,
+                "total_price": Decimal("29.500")
             },
             "post_order_upsell": {
                 "quantity": 1,
                 "paid_quantity": 1,
                 "free_quantity": 0,
-                "total_price": Decimal("18.900")
+                "total_price": Decimal("12.900")
             }
         }
     }
