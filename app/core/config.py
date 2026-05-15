@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     FRONTEND_ORIGIN: str = "https://getkhafeefa.shop"
     CORS_ORIGINS: str = "https://getkhafeefa.shop"
     
-    DATABASE_URL: str = "postgres://khafeefa:khafeefa@localhost:5432/getkhafeefa?sslmode=disable"
+    DATABASE_URL: str = "postgres://khafeefa:khafeefa@getkhafeefa_database:5432/getkhafeefa?sslmode=disable"
     RUN_MIGRATIONS_ON_START: bool = True
     
     ORDER_WEBHOOK_URL: str = ""

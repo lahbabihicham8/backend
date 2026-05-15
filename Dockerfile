@@ -9,6 +9,9 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
+RUN chmod +x scripts/start.sh
 
-# Command to run migrations and start server
-CMD ["sh", "-c", "alembic upgrade head && gunicorn app.main:app -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000"]
+EXPOSE 8000
+
+# Wait for Postgres, run migrations, then start the API.
+CMD ["scripts/start.sh"]
