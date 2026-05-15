@@ -1,8 +1,35 @@
-from pydantic_settings import BaseSettings
 from pathlib import Path
 from typing import List
+from urllib.parse import urlsplit, urlunsplit
+
+from pydantic import model_validator
+from pydantic_settings import BaseSettings
 
 ENV_FILE = Path(__file__).resolve().parents[2] / ".env"
+
+
+def normalize_database_url(url: str, host: str, user: str, password: str) -> str:
+    parts = urlsplit(url)
+    hostname = parts.hostname or host
+
+    if hostname in {"localhost", "127.0.0.1", "::1", "getkhafeefa_database", "khafeefa_database"}:
+        hostname = host
+
+    username = parts.username or user
+    current_password = parts.password or password
+    if username in {"khafeefa", "hicham"}:
+        username = user
+        current_password = password
+
+    auth = username
+    if current_password:
+        auth = f"{auth}:{current_password}"
+    if auth:
+        auth = f"{auth}@"
+
+    port = f":{parts.port}" if parts.port else ""
+    return urlunsplit(parts._replace(netloc=f"{auth}{hostname}{port}"))
+
 
 class Settings(BaseSettings):
     ENVIRONMENT: str = "production"
@@ -12,6 +39,9 @@ class Settings(BaseSettings):
     CORS_ORIGINS: str = "https://getkhafeefa.shop"
     
     DATABASE_URL: str = "postgres://getkhafeefa:getkhafeefa@khafeefa_database:5432/getkhafeefa?sslmode=disable"
+    DATABASE_HOST: str = "khafeefa_database"
+    DATABASE_USER: str = "getkhafeefa"
+    DATABASE_PASSWORD: str = "getkhafeefa"
     RUN_MIGRATIONS_ON_START: bool = True
     
     ORDER_WEBHOOK_URL: str = ""
@@ -43,6 +73,16 @@ class Settings(BaseSettings):
     @property
     def test_phones_list(self) -> List[str]:
         return [p.strip() for p in self.MAXMIND_ALLOW_TEST_PHONES.split(",") if p.strip()]
+
+    @model_validator(mode="after")
+    def normalize_database_settings(self) -> "Settings":
+        self.DATABASE_URL = normalize_database_url(
+            self.DATABASE_URL,
+            self.DATABASE_HOST,
+            self.DATABASE_USER,
+            self.DATABASE_PASSWORD,
+        )
+        return self
 
     class Config:
         env_file = ENV_FILE

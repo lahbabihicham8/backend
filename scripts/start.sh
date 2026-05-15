@@ -8,28 +8,14 @@ export DATABASE_PASSWORD="${DATABASE_PASSWORD:-getkhafeefa}"
 
 DATABASE_URL="$(python - <<'PY'
 import os
-from urllib.parse import urlsplit, urlunsplit
+from app.core.config import normalize_database_url
 
 url = os.environ["DATABASE_URL"]
 replacement_host = os.environ["DATABASE_HOST"]
 replacement_user = os.environ["DATABASE_USER"]
 replacement_password = os.environ["DATABASE_PASSWORD"]
-parts = urlsplit(url)
 
-hostname = replacement_host if parts.hostname in {"localhost", "127.0.0.1", "::1", "getkhafeefa_database", "khafeefa_database"} else parts.hostname
-username = replacement_user or parts.username or ""
-password = replacement_password or parts.password or ""
-auth = username
-if password:
-    auth = f"{auth}:{password}"
-if auth:
-    auth = f"{auth}@"
-
-port = f":{parts.port}" if parts.port else ""
-parts = parts._replace(netloc=f"{auth}{hostname}{port}")
-url = urlunsplit(parts)
-
-print(url)
+print(normalize_database_url(url, replacement_host, replacement_user, replacement_password))
 PY
 )"
 export DATABASE_URL
