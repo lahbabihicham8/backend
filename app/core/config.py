@@ -7,19 +7,22 @@ from pydantic_settings import BaseSettings
 
 ENV_FILE = Path(__file__).resolve().parents[2] / ".env"
 
+CANONICAL_DATABASE_HOST = "khafeefa_database"
+CANONICAL_DATABASE_USER = "getkhafeefa"
+CANONICAL_DATABASE_PASSWORD = "getkhafeefa"
+
 
 def normalize_database_url(url: str, host: str, user: str, password: str) -> str:
     parts = urlsplit(url)
-    hostname = parts.hostname or host
+    hostname = parts.hostname or host or CANONICAL_DATABASE_HOST
 
     if hostname in {"localhost", "127.0.0.1", "::1", "getkhafeefa_database", "khafeefa_database"}:
-        hostname = host
+        hostname = CANONICAL_DATABASE_HOST
 
-    username = parts.username or user
-    current_password = parts.password or password
-    if username in {"khafeefa", "hicham"}:
-        username = user
-        current_password = password
+    # EasyPanel may keep stale DATABASE_URL/DATABASE_USER values after a redeploy.
+    # Force the credentials that match the initialized PostgreSQL role.
+    username = CANONICAL_DATABASE_USER
+    current_password = CANONICAL_DATABASE_PASSWORD
 
     auth = username
     if current_password:
@@ -39,9 +42,9 @@ class Settings(BaseSettings):
     CORS_ORIGINS: str = "https://getkhafeefa.shop"
     
     DATABASE_URL: str = "postgres://getkhafeefa:getkhafeefa@khafeefa_database:5432/getkhafeefa?sslmode=disable"
-    DATABASE_HOST: str = "khafeefa_database"
-    DATABASE_USER: str = "getkhafeefa"
-    DATABASE_PASSWORD: str = "getkhafeefa"
+    DATABASE_HOST: str = CANONICAL_DATABASE_HOST
+    DATABASE_USER: str = CANONICAL_DATABASE_USER
+    DATABASE_PASSWORD: str = CANONICAL_DATABASE_PASSWORD
     RUN_MIGRATIONS_ON_START: bool = True
     
     ORDER_WEBHOOK_URL: str = ""
@@ -76,6 +79,9 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def normalize_database_settings(self) -> "Settings":
+        self.DATABASE_HOST = CANONICAL_DATABASE_HOST
+        self.DATABASE_USER = CANONICAL_DATABASE_USER
+        self.DATABASE_PASSWORD = CANONICAL_DATABASE_PASSWORD
         self.DATABASE_URL = normalize_database_url(
             self.DATABASE_URL,
             self.DATABASE_HOST,

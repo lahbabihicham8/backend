@@ -3,8 +3,8 @@ set -eu
 
 export DATABASE_URL="${DATABASE_URL:-postgres://getkhafeefa:getkhafeefa@khafeefa_database:5432/getkhafeefa?sslmode=disable}"
 export DATABASE_HOST="${DATABASE_HOST:-khafeefa_database}"
-export DATABASE_USER="${DATABASE_USER:-getkhafeefa}"
-export DATABASE_PASSWORD="${DATABASE_PASSWORD:-getkhafeefa}"
+export DATABASE_USER="getkhafeefa"
+export DATABASE_PASSWORD="getkhafeefa"
 
 DATABASE_URL="$(python - <<'PY'
 import os
