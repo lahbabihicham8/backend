@@ -3,6 +3,8 @@ set -eu
 
 export DATABASE_URL="${DATABASE_URL:-postgres://getkhafeefa:getkhafeefa@khafeefa_database:5432/getkhafeefa?sslmode=disable}"
 export DATABASE_HOST="${DATABASE_HOST:-khafeefa_database}"
+export DATABASE_USER="${DATABASE_USER:-getkhafeefa}"
+export DATABASE_PASSWORD="${DATABASE_PASSWORD:-getkhafeefa}"
 
 DATABASE_URL="$(python - <<'PY'
 import os
@@ -10,26 +12,29 @@ from urllib.parse import urlsplit, urlunsplit
 
 url = os.environ["DATABASE_URL"]
 replacement_host = os.environ["DATABASE_HOST"]
+replacement_user = os.environ["DATABASE_USER"]
+replacement_password = os.environ["DATABASE_PASSWORD"]
 parts = urlsplit(url)
 
-if parts.hostname in {"localhost", "127.0.0.1", "::1"}:
-    username = parts.username or ""
-    password = parts.password or ""
-    auth = username
-    if password:
-        auth = f"{auth}:{password}"
-    if auth:
-        auth = f"{auth}@"
+hostname = replacement_host if parts.hostname in {"localhost", "127.0.0.1", "::1", "getkhafeefa_database", "khafeefa_database"} else parts.hostname
+username = replacement_user or parts.username or ""
+password = replacement_password or parts.password or ""
+auth = username
+if password:
+    auth = f"{auth}:{password}"
+if auth:
+    auth = f"{auth}@"
 
-    port = f":{parts.port}" if parts.port else ""
-    parts = parts._replace(netloc=f"{auth}{replacement_host}{port}")
-    url = urlunsplit(parts)
+port = f":{parts.port}" if parts.port else ""
+parts = parts._replace(netloc=f"{auth}{hostname}{port}")
+url = urlunsplit(parts)
 
 print(url)
 PY
 )"
 export DATABASE_URL
 echo "Using database host: ${DATABASE_HOST}"
+echo "Using database user: ${DATABASE_USER}"
 
 python - <<'PY'
 import os
