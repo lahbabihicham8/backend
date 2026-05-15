@@ -1,6 +1,36 @@
 #!/bin/sh
 set -eu
 
+export DATABASE_URL="${DATABASE_URL:-postgres://getkhafeefa:getkhafeefa@khafeefa_database:5432/getkhafeefa?sslmode=disable}"
+export DATABASE_HOST="${DATABASE_HOST:-khafeefa_database}"
+
+DATABASE_URL="$(python - <<'PY'
+import os
+from urllib.parse import urlsplit, urlunsplit
+
+url = os.environ["DATABASE_URL"]
+replacement_host = os.environ["DATABASE_HOST"]
+parts = urlsplit(url)
+
+if parts.hostname in {"localhost", "127.0.0.1", "::1"}:
+    username = parts.username or ""
+    password = parts.password or ""
+    auth = username
+    if password:
+        auth = f"{auth}:{password}"
+    if auth:
+        auth = f"{auth}@"
+
+    port = f":{parts.port}" if parts.port else ""
+    parts = parts._replace(netloc=f"{auth}{replacement_host}{port}")
+    url = urlunsplit(parts)
+
+print(url)
+PY
+)"
+export DATABASE_URL
+echo "Using database host: ${DATABASE_HOST}"
+
 python - <<'PY'
 import os
 import time
