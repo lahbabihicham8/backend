@@ -10,6 +10,12 @@ app = FastAPI(
 
 # Set up CORS
 origins = [origin.strip() for origin in settings.CORS_ORIGINS.split(",") if origin.strip()]
+for origin in [
+    "https://getkhafeefa.shop",
+    "https://getkhafeefa-frontend.amt9aa.easypanel.host",
+]:
+    if origin not in origins:
+        origins.append(origin)
 
 app.add_middleware(
     CORSMiddleware,

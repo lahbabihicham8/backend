@@ -13,6 +13,7 @@ class Order(Base):
     customer_name = Column(String, nullable=False)
     phone_raw = Column(String, nullable=False)
     phone_e164 = Column(String, nullable=False)
+    address = Column(Text, nullable=True)
     phone_is_test_whitelisted = Column(Boolean, default=False)
     
     currency = Column(String, default="KWD")

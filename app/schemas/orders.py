@@ -10,6 +10,7 @@ class OrderItemCreate(BaseModel):
 class OrderCreate(BaseModel):
     customer_name: str = Field(..., min_length=2, max_length=80)
     phone: str
+    address: Optional[str] = None
     items: List[OrderItemCreate]
     currency: str = "KWD"
     payment_method: str = "COD"

@@ -98,6 +98,7 @@ async def create_order(
         customer_name=order_in.customer_name,
         phone_raw=order_in.phone,
         phone_e164=phone_res.e164,
+        address=order_in.address,
         phone_is_test_whitelisted=is_test_phone,
         currency=order_in.currency,
         subtotal=subtotal,
