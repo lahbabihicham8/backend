@@ -1,7 +1,7 @@
 """empty message
 
 Revision ID: initial
-Revises:
+Revises: 
 Create Date: 2026-05-13 00:00:00.000000
 
 """
@@ -53,7 +53,7 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_orders_order_number'), 'orders', ['order_number'], unique=True)
-
+    
     op.create_table('order_items',
         sa.Column('id', postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column('order_id', postgresql.UUID(as_uuid=True), nullable=False),
@@ -68,7 +68,7 @@ def upgrade() -> None:
         sa.ForeignKeyConstraint(['order_id'], ['orders.id'], ),
         sa.PrimaryKeyConstraint('id')
     )
-
+    
     op.create_table('event_logs',
         sa.Column('id', postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column('order_id', postgresql.UUID(as_uuid=True), nullable=True),

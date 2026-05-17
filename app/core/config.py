@@ -40,39 +40,36 @@ class Settings(BaseSettings):
     API_BASE_URL: str = "https://api.getkhafeefa.shop"
     FRONTEND_ORIGIN: str = "https://getkhafeefa.shop"
     CORS_ORIGINS: str = "https://getkhafeefa.shop"
-
+    
     DATABASE_URL: str = "postgres://getkhafeefa:getkhafeefa@khafeefa_database:5432/getkhafeefa?sslmode=disable"
     DATABASE_HOST: str = CANONICAL_DATABASE_HOST
     DATABASE_USER: str = CANONICAL_DATABASE_USER
     DATABASE_PASSWORD: str = CANONICAL_DATABASE_PASSWORD
     RUN_MIGRATIONS_ON_START: bool = True
-
+    
     ORDER_WEBHOOK_URL: str = ""
     ORDER_WEBHOOK_SECRET: str = ""
-
+    
     MAXMIND_ACCOUNT_ID: str = ""
     MAXMIND_LICENSE_KEY: str = ""
     MAXMIND_MINFRAUD_ENDPOINT: str = "https://minfraud.maxmind.com/minfraud/v2.0/insights"
     MAXMIND_MAX_RISK_SCORE: int = 15
     MAXMIND_ALLOW_TEST_PHONES: str = "055000000"
-    ALLOW_NON_KUWAIT_IPS: bool = True
-    FRAUD_BLOCK_NON_KUWAIT: bool = False
-    FRAUD_BLOCK_VPN: bool = False
-    FRAUD_BLOCK_HIGH_RISK: bool = False
+    ALLOW_NON_KUWAIT_IPS: bool = False
     FRAUD_API_FAILURE_MODE: str = "allow"
-
+    
     META_PIXEL_ID: str = ""
     META_ACCESS_TOKEN: str = ""
     META_TEST_EVENT_CODE: str = ""
-
+    
     TIKTOK_PIXEL_CODE: str = ""
     TIKTOK_ACCESS_TOKEN: str = ""
     TIKTOK_TEST_EVENT_CODE: str = ""
-
+    
     SNAP_PIXEL_ID: str = ""
     SNAP_ACCESS_TOKEN: str = ""
     SNAP_TEST_EVENT_CODE: str = ""
-
+    
     WHATSAPP_SUPPORT_NUMBER: str = ""
     LOG_LEVEL: str = "INFO"
 

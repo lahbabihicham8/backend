@@ -4,7 +4,7 @@ from app.core.config import settings
 async def send_to_sheets(order_data: dict):
     if not settings.ORDER_WEBHOOK_URL:
         return False
-
+        
     try:
         async with httpx.AsyncClient() as client:
             payload = {

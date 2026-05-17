@@ -6,9 +6,9 @@ from app.services.hashing import hash_sha256
 async def send_snap_event(event_name: str, order_data: dict, phone_e164: str):
     if not settings.SNAP_PIXEL_ID or not settings.SNAP_ACCESS_TOKEN:
         return False
-
+        
     url = "https://tr.snapchat.com/v2/conversion"
-
+    
     event = {
         "pixel_id": settings.SNAP_PIXEL_ID,
         "event_type": event_name,
@@ -22,15 +22,15 @@ async def send_snap_event(event_name: str, order_data: dict, phone_e164: str):
         "currency": order_data.get("currency", "KWD"),
         "price": float(order_data.get("total", 0))
     }
-
+    
     if order_data.get("sc_cookie1"):
         event["uuid_c1"] = order_data["sc_cookie1"]
-
+        
     headers = {
         "Authorization": f"Bearer {settings.SNAP_ACCESS_TOKEN}",
         "Content-Type": "application/json"
     }
-
+    
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(url, json=event, headers=headers, timeout=10.0)
