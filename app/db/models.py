@@ -15,38 +15,38 @@ class Order(Base):
     phone_e164 = Column(String, nullable=False)
     address = Column(Text, nullable=True)
     phone_is_test_whitelisted = Column(Boolean, default=False)
-    
+
     currency = Column(String, default="KWD")
     subtotal = Column(Numeric(10, 3), nullable=False)
     total = Column(Numeric(10, 3), nullable=False)
     payment_method = Column(String, default="COD")
     status = Column(String, default="pending_confirmation") # pending_confirmation, rejected_fraud, cancelled, confirmed, delivered
-    
+
     source_url = Column(String, nullable=True)
     utm_source = Column(String, nullable=True)
     utm_medium = Column(String, nullable=True)
     utm_campaign = Column(String, nullable=True)
     utm_content = Column(String, nullable=True)
     utm_term = Column(String, nullable=True)
-    
+
     fbp = Column(String, nullable=True)
     fbc = Column(String, nullable=True)
     ttclid = Column(String, nullable=True)
     ttp = Column(String, nullable=True)
     sc_click_id = Column(String, nullable=True)
     sc_cookie1 = Column(String, nullable=True)
-    
+
     client_ip = Column(String, nullable=True)
     user_agent = Column(Text, nullable=True)
     event_id = Column(String, nullable=True)
-    
+
     fraud_decision = Column(String, nullable=True)
     fraud_reason = Column(String, nullable=True)
     maxmind_risk_score = Column(Numeric(5, 2), nullable=True)
     maxmind_response_json = Column(JSON, nullable=True)
-    
+
     sheet_sync_status = Column(String, default="pending")
-    
+
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -64,7 +64,7 @@ class OrderItem(Base):
     unit_price = Column(Numeric(10, 3), nullable=False)
     total_price = Column(Numeric(10, 3), nullable=False)
     is_upsell = Column(Boolean, default=False)
-    
+
     created_at = Column(DateTime, default=datetime.utcnow)
 
     order = relationship("Order", back_populates="items")
@@ -81,5 +81,5 @@ class EventLog(Base):
     response_json = Column(JSON, nullable=True)
     status_code = Column(Numeric(5, 0), nullable=True)
     success = Column(Boolean, default=False)
-    
+
     created_at = Column(DateTime, default=datetime.utcnow)

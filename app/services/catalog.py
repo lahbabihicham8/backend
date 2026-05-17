@@ -39,7 +39,7 @@ def get_offer_details(product_id: str, offer_id: str):
     offer = product["offers"].get(offer_id)
     if not offer:
         return None
-    
+
     return {
         "product_title": product["title"],
         "quantity": offer["quantity"],

@@ -10,9 +10,6 @@ class FraudDecision:
 
 def inspect_order(ip: str, user_agent: str, order_data: dict) -> FraudDecision:
     if not settings.MAXMIND_ACCOUNT_ID or not settings.MAXMIND_LICENSE_KEY:
-        # If not configured, allow by default or fail based on config
-        if settings.FRAUD_API_FAILURE_MODE == "reject":
-            return FraudDecision(False, "MAXMIND_NOT_CONFIGURED")
         return FraudDecision(True, "MAXMIND_NOT_CONFIGURED")
 
     client = minfraud.Client(
@@ -40,24 +37,28 @@ def inspect_order(ip: str, user_agent: str, order_data: dict) -> FraudDecision:
         }
 
         insights = client.insights(request)
-        
-        # Check Country
+
+        # Fraud signals are saved with the order, but blocking is opt-in so VPNs
+        # and restricted Wi-Fi networks do not prevent cash-on-delivery orders.
         country = insights.ip_address.country.iso_code
-        if country != "KW" and not settings.ALLOW_NON_KUWAIT_IPS:
+        if country != "KW" and settings.FRAUD_BLOCK_NON_KUWAIT:
             return FraudDecision(False, "ORDER_REGION_BLOCKED", insights.risk_score, insights.dict())
 
-        # Check Proxy/VPN
         traits = insights.ip_address.traits
-        if traits.is_anonymous_vpn or traits.is_hosting_provider or traits.is_public_proxy or traits.is_tor_exit_node or traits.is_residential_proxy:
+        uses_proxy = (
+            traits.is_anonymous_vpn
+            or traits.is_hosting_provider
+            or traits.is_public_proxy
+            or traits.is_tor_exit_node
+            or traits.is_residential_proxy
+        )
+        if uses_proxy and settings.FRAUD_BLOCK_VPN:
             return FraudDecision(False, "VPN_OR_PROXY_BLOCKED", insights.risk_score, insights.dict())
 
-        # Check Risk Score
-        if insights.risk_score > settings.MAXMIND_MAX_RISK_SCORE:
+        if insights.risk_score > settings.MAXMIND_MAX_RISK_SCORE and settings.FRAUD_BLOCK_HIGH_RISK:
             return FraudDecision(False, "HIGH_RISK_ORDER", insights.risk_score, insights.dict())
 
         return FraudDecision(True, "PASSED", insights.risk_score, insights.dict())
 
     except Exception as e:
-        if settings.FRAUD_API_FAILURE_MODE == "reject":
-            return FraudDecision(False, f"MAXMIND_ERROR: {str(e)}")
         return FraudDecision(True, f"MAXMIND_ERROR_BYPASSED: {str(e)}")
