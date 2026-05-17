@@ -2,15 +2,6 @@
 .env.*
 !.env.example
 
-node_modules/
-.next/
-out/
-dist/
-build/
-
+venv/
 __pycache__/
 .pytest_cache/
-.venv/
-venv/
-
-.DS_Store

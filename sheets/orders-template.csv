@@ -1,1 +1,0 @@
-order_id,order_number,created_at,customer_name,phone_e164,phone_raw,status,currency,subtotal,total,payment_method,client_ip,country,fraud_decision,fraud_reason,maxmind_risk_score,utm_source,utm_medium,utm_campaign,utm_content,utm_term,event_id
