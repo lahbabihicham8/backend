@@ -1,17 +1,6 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Sans_Arabic, Inter } from "next/font/google";
+import { PixelLoader } from "@/components/pixel-loader";
 import "./globals.css";
-
-const arabicFont = IBM_Plex_Sans_Arabic({
-  subsets: ["arabic"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-arabic"
-});
-
-const latinFont = Inter({
-  subsets: ["latin"],
-  variable: "--font-latin"
-});
 
 export const metadata: Metadata = {
   title: "خفيفة | مروحة خصر وباور بانك",
@@ -26,8 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ar-KW" dir="rtl">
-      <body className={`${arabicFont.variable} ${latinFont.variable} font-sans`}>
+      <body>
         {children}
+        <PixelLoader />
       </body>
     </html>
   );

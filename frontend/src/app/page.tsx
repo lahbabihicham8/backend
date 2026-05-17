@@ -144,10 +144,10 @@ export default function Home() {
                   تصميم ذكي يخدمك في كل مشوار
                 </h2>
                 <p className="text-lg leading-8 text-[var(--muted)]">
-                  صممنا "خفيفة" لتكون رفيقك المثالي في الأجواء الحارة. بفضل تصميمها المدمج وقوة أدائها، توفر لك راحة فورية أينما كنت.
+                  صممنا &quot;خفيفة&quot; لتكون رفيقك المثالي في الأجواء الحارة. بفضل تصميمها المدمج وقوة أدائها، توفر لك راحة فورية أينما كنت.
                 </p>
               </div>
-              
+
               <ul className="space-y-6">
                 {[
                   {
@@ -226,7 +226,7 @@ export default function Home() {
                       ))}
                     </div>
                   </div>
-                  <p className="text-sm leading-7 text-[var(--muted)]">"{review.text}"</p>
+                  <p className="text-sm leading-7 text-[var(--muted)]">&quot;{review.text}&quot;</p>
                   <div className="text-xs text-gray-400">{review.date}</div>
                 </div>
               ))}
@@ -296,11 +296,11 @@ export default function Home() {
                 فريقنا المميز موجود عشانك! إذا عندك أي استفسار أو مشكلة، لا تتردد تكلمنا.
               </p>
             </div>
-            
+
             <div className="grid gap-6 sm:grid-cols-2">
-              <a 
-                href="https://wa.me/96500000000" 
-                target="_blank" 
+              <a
+                href="https://wa.me/96500000000"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="flex flex-col items-center gap-4 rounded-3xl border border-[var(--border)] bg-white p-8 transition-transform hover:-translate-y-1 hover:shadow-lg"
               >
@@ -314,9 +314,9 @@ export default function Home() {
                   <p className="mt-1 text-[var(--muted)]">رد سريع خلال ساعات العمل</p>
                 </div>
               </a>
-              
-              <a 
-                href="mailto:support@khafeefa.com" 
+
+              <a
+                href="mailto:support@khafeefa.com"
                 className="flex flex-col items-center gap-4 rounded-3xl border border-[var(--border)] bg-white p-8 transition-transform hover:-translate-y-1 hover:shadow-lg"
               >
                 <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--cta-orange)]/10 text-[var(--cta-orange)]">

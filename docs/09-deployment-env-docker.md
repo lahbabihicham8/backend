@@ -75,9 +75,9 @@ Backend:
 - Domain: `api.getkhafeefa.shop`
 - Port: `8000`
 - Env from `backend/.env.example`.
-- Database internal host: `getkhafeefa_database`.
+- Database internal host: `khafeefa_database`.
 - Database name: `getkhafeefa`.
-- Database URL: `postgres://hicham:hicham.1lahbabi@getkhafeefa_database:5432/getkhafeefa?sslmode=disable`
+- Database URL: `postgres://getkhafeefa:getkhafeefa@khafeefa_database:5432/getkhafeefa?sslmode=disable`
 
 Database:
 

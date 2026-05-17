@@ -1,0 +1,49 @@
+services:
+  khafeefa_database:
+    image: postgres:16-alpine
+    container_name: khafeefa_database
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - getkhafeefa_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      ENVIRONMENT: development
+      FRONTEND_ORIGIN: http://localhost:3000
+      CORS_ORIGINS: http://localhost:3000,http://127.0.0.1:3000
+      FRAUD_API_FAILURE_MODE: allow
+    ports:
+      - "8000:8000"
+    depends_on:
+      khafeefa_database:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+    environment:
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://localhost:3000}
+      NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:8000}
+      NEXT_PUBLIC_META_PIXEL_ID: ${NEXT_PUBLIC_META_PIXEL_ID:-}
+      NEXT_PUBLIC_TIKTOK_PIXEL_ID: ${NEXT_PUBLIC_TIKTOK_PIXEL_ID:-}
+      NEXT_PUBLIC_SNAP_PIXEL_ID: ${NEXT_PUBLIC_SNAP_PIXEL_ID:-}
+      NEXT_PUBLIC_ENABLE_PIXELS: ${NEXT_PUBLIC_ENABLE_PIXELS:-true}
+      NEXT_PUBLIC_ENVIRONMENT: ${NEXT_PUBLIC_ENVIRONMENT:-development}
+    ports:
+      - "3000:3000"
+
+volumes:
+  getkhafeefa_postgres_data:

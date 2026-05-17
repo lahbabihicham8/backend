@@ -9,7 +9,7 @@ Domains:
 - Frontend: `https://getkhafeefa.shop`
 - Backend API: `https://api.getkhafeefa.shop`
 - Database name: `getkhafeefa`
-- Backend Postgres URL: `postgres://hicham:hicham.1lahbabi@getkhafeefa_database:5432/getkhafeefa?sslmode=disable`
+- Backend Postgres URL: `postgres://getkhafeefa:getkhafeefa@khafeefa_database:5432/getkhafeefa?sslmode=disable`
 
 Keep the real `DATABASE_URL` in `backend/.env`; do not commit production credentials.
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { formatKwd, type Offer } from "@/data/products";
+import { buildOfferPayload, trackPixelEvent } from "@/lib/tracking";
 
 type OfferCardProps = {
   offer: Offer;
@@ -23,8 +24,9 @@ export function OfferCard({ offer }: OfferCardProps) {
           ? `يطلع عليك الحبة بـ ${formatKwd(offer.price / offer.quantity)}`
           : "أفضل بداية للتجربة اليومية"}
       </p>
-      <button 
+      <button
         onClick={() => {
+          trackPixelEvent("AddToCart", buildOfferPayload(offer));
           const select = document.getElementById('offer-select') as HTMLSelectElement;
           if (select) select.value = offer.id;
           document.getElementById('checkout')?.scrollIntoView({ behavior: 'smooth' });

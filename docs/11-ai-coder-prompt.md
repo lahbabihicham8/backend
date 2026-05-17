@@ -73,7 +73,7 @@ Important constraints:
 - Do not trust frontend prices.
 - Do not send raw PII in CAPI server payloads.
 - Use Decimal for KWD money.
-- Use backend `DATABASE_URL=postgres://hicham:hicham.1lahbabi@getkhafeefa_database:5432/getkhafeefa?sslmode=disable` in environment variables.
+- Use backend `DATABASE_URL=postgres://getkhafeefa:getkhafeefa@khafeefa_database:5432/getkhafeefa?sslmode=disable` in environment variables.
 - Use MaxMind minFraud before accepting real orders. Only allow Kuwait IPs, reject VPN/proxy/Tor/hosting/high-risk traffic, and bypass only the three whitelisted test phones.
 - Keep placeholder reviews/images clearly replaceable. Do not present fake reviews as real in code comments/content data.
 - Use the placeholder reviews in docs/12-arabic-copy-cro-bank.md only as seed UI content marked as placeholders until real customer reviews are available.
