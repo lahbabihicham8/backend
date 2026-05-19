@@ -150,6 +150,7 @@ async def create_order(
         "order_number": db_order.order_number,
         "customer_name": db_order.customer_name,
         "phone_raw": db_order.phone_raw,
+        "phone_e164": db_order.phone_e164,
         "status": db_order.status,
         "currency": db_order.currency,
         "subtotal": str(db_order.subtotal),
@@ -165,6 +166,7 @@ async def create_order(
         "ttclid": db_order.ttclid,
         "ttp": db_order.ttp,
         "sc_cookie1": db_order.sc_cookie1,
+        "created_at": db_order.created_at.isoformat() if db_order.created_at else None,
         "items": [
             {
                 "product_id": i.product_id,
@@ -237,11 +239,13 @@ async def accept_upsell(
         "order_number": db_order.order_number,
         "customer_name": db_order.customer_name,
         "phone_raw": db_order.phone_raw,
+        "phone_e164": db_order.phone_e164,
         "status": db_order.status,
         "currency": db_order.currency,
         "subtotal": str(db_order.subtotal),
         "total": str(db_order.total),
         "payment_method": db_order.payment_method,
+        "created_at": db_order.created_at.isoformat() if db_order.created_at else None,
         "items": [
             {
                 "product_id": i.product_id,

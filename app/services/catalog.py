@@ -3,6 +3,7 @@ from decimal import Decimal
 CATALOG = {
     "khafeefa-waist-fan-powerbank": {
         "title": "مروحة خفيفة للخصر مع باور بانك", # Backend uses this for the order item title
+        "sku": "KH-WF-PB-001",
         "offers": {
             "one": {
                 "quantity": 1,
