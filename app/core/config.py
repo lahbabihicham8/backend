@@ -48,7 +48,6 @@ class Settings(BaseSettings):
     RUN_MIGRATIONS_ON_START: bool = True
 
     ORDER_WEBHOOK_URL: str = ""
-    ORDER_WEBHOOK_SECRET: str = ""
 
     MAXMIND_ACCOUNT_ID: str = ""
     MAXMIND_LICENSE_KEY: str = ""
