@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 from typing import Any
 
@@ -6,6 +7,7 @@ import httpx
 from app.core.config import settings
 from app.services.catalog import CATALOG
 
+logger = logging.getLogger(__name__)
 
 DEFAULT_SKU = "KH-PROD"
 
@@ -75,18 +77,66 @@ def build_sheet_row(order_data: dict) -> dict:
     }
 
 
-async def send_to_sheets(order_data: dict) -> bool:
-    if not settings.ORDER_WEBHOOK_URL:
-        return False
+# In-memory cache of the most recent webhook attempt, used by the diagnostics
+# endpoint so we can see why orders are not landing in the sheet.
+last_webhook_attempt: dict = {
+    "tried_at": None,
+    "ok": None,
+    "status_code": None,
+    "response_body": None,
+    "error": None,
+    "url_configured": False,
+    "row": None,
+}
 
-    row = build_sheet_row(order_data)
+
+def _record_attempt(**kwargs) -> None:
+    last_webhook_attempt.update(kwargs)
+    last_webhook_attempt["tried_at"] = datetime.utcnow().isoformat()
+
+
+async def post_row_to_webhook(row: dict) -> dict:
+    """POST a row to the configured webhook and return diagnostic info."""
+    result = {
+        "ok": False,
+        "url_configured": bool(settings.ORDER_WEBHOOK_URL),
+        "status_code": None,
+        "response_body": None,
+        "error": None,
+        "row": row,
+    }
+    if not settings.ORDER_WEBHOOK_URL:
+        result["error"] = "ORDER_WEBHOOK_URL is empty"
+        _record_attempt(**result)
+        logger.warning("Sheets webhook skipped: ORDER_WEBHOOK_URL is not set")
+        return result
+
     try:
         async with httpx.AsyncClient(follow_redirects=True) as client:
             response = await client.post(
                 settings.ORDER_WEBHOOK_URL,
                 json=row,
-                timeout=10.0,
+                timeout=15.0,
             )
-            return 200 <= response.status_code < 300
-    except Exception:
-        return False
+            result["status_code"] = response.status_code
+            try:
+                result["response_body"] = response.text[:1000]
+            except Exception:
+                result["response_body"] = None
+            result["ok"] = 200 <= response.status_code < 300
+    except Exception as exc:
+        result["error"] = f"{type(exc).__name__}: {exc}"
+        logger.exception("Sheets webhook failed")
+
+    _record_attempt(**result)
+    logger.info(
+        "Sheets webhook attempt: ok=%s status=%s error=%s",
+        result["ok"], result["status_code"], result["error"],
+    )
+    return result
+
+
+async def send_to_sheets(order_data: dict) -> bool:
+    row = build_sheet_row(order_data)
+    result = await post_row_to_webhook(row)
+    return bool(result.get("ok"))
