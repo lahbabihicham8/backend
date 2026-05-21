@@ -40,12 +40,24 @@ const PRODUCT_CATALOG = {
 };
 
 function doGet(e) {
-  return jsonResponse_({
-    ok: true,
-    message: "Khafeefa orders webhook is live.",
-    spreadsheet_id: SPREADSHEET_ID,
-    sheet: SHEET_NAME
-  });
+  // Dump current sheet contents so Cursor can read the rows directly.
+  try {
+    const sheet = getOrCreateSheet_();
+    const values = sheet.getDataRange().getValues();
+    return jsonResponse_({
+      ok: true,
+      message: "Khafeefa orders webhook is live.",
+      spreadsheet_id: SPREADSHEET_ID,
+      sheet: SHEET_NAME,
+      row_count: values.length,
+      rows: values
+    });
+  } catch (err) {
+    return jsonResponse_({
+      ok: false,
+      error: String(err && err.message ? err.message : err)
+    });
+  }
 }
 
 function doPost(e) {
