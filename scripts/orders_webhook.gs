@@ -1,22 +1,26 @@
 /**
  * Khafeefa - Orders webhook for Google Sheets
  *
- * Deployment:
- *   1. Open the orders sheet → Extensions → Apps Script.
- *   2. Delete the default code and paste this entire file.
- *   3. Click Save (disk icon). Project name: "Khafeefa Orders Webhook".
- *   4. Deploy → New deployment → Select type: Web app.
+ * Replace SPREADSHEET_ID below with the ID from your sheet URL:
+ *   https://docs.google.com/spreadsheets/d/<<SPREADSHEET_ID>>/edit
+ *
+ * Deployment steps:
+ *   1. Open the sheet → Extensions → Apps Script (or use this standalone script).
+ *   2. Paste this ENTIRE file (replace any existing code).
+ *   3. Save (disk icon). Project name: "Khafeefa Orders Webhook".
+ *   4. Deploy → New deployment → gear icon → Web app.
  *        - Description: orders
  *        - Execute as: Me
  *        - Who has access: Anyone
  *      Click Deploy → Authorize when prompted.
- *   5. Copy the "Web app URL" (ends with /exec) and put it in the backend env:
+ *   5. Copy the Web app URL (ends with /exec) and paste it into the backend env:
  *        ORDER_WEBHOOK_URL=https://script.google.com/macros/s/.../exec
- *   6. Redeploy the backend service in EasyPanel.
  *
- * After this, every new order automatically appends one row.
+ * If you edit this script later, ALWAYS:
+ *   Deploy → Manage deployments → pencil icon → Version: New version → Deploy.
  */
 
+const SPREADSHEET_ID = "11r-5mqiZaPJ2IiqcTrTDaV6jcVT8GmtH6p9cR8cjXdo";
 const SHEET_NAME = "Orders";
 const HEADERS = [
   "date",
@@ -32,11 +36,25 @@ const HEADERS = [
   "status"
 ];
 
+function doGet(e) {
+  return jsonResponse_({
+    ok: true,
+    message: "Khafeefa orders webhook is live.",
+    spreadsheet_id: SPREADSHEET_ID,
+    sheet: SHEET_NAME
+  });
+}
+
 function doPost(e) {
   const lock = LockService.getScriptLock();
-  lock.waitLock(30000);
   try {
-    const body = e && e.postData && e.postData.contents ? e.postData.contents : "{}";
+    lock.waitLock(30000);
+  } catch (err) {
+    return jsonResponse_({ ok: false, error: "LOCK_TIMEOUT: " + err.message });
+  }
+
+  try {
+    const body = (e && e.postData && e.postData.contents) ? e.postData.contents : "{}";
     const data = JSON.parse(body);
 
     const sheet = getOrCreateSheet_();
@@ -55,22 +73,26 @@ function doPost(e) {
       data.status || ""
     ]);
 
-    return jsonResponse_({ ok: true });
+    return jsonResponse_({
+      ok: true,
+      order_id: data.order_id || null,
+      appended_row: sheet.getLastRow()
+    });
   } catch (err) {
-    return jsonResponse_({ ok: false, error: String(err && err.message || err) });
+    return jsonResponse_({
+      ok: false,
+      error: String(err && err.message ? err.message : err),
+      stack: String(err && err.stack ? err.stack : "")
+    });
   } finally {
-    lock.releaseLock();
+    try { lock.releaseLock(); } catch (e) {}
   }
 }
 
-function doGet() {
-  return ContentService
-    .createTextOutput("Khafeefa orders webhook is live.")
-    .setMimeType(ContentService.MimeType.TEXT);
-}
-
 function getOrCreateSheet_() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  // Always open the spreadsheet by ID so this works whether the script is
+  // bound to a sheet or standalone.
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
   let sheet = ss.getSheetByName(SHEET_NAME);
   if (!sheet) {
     sheet = ss.insertSheet(SHEET_NAME);
