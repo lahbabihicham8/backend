@@ -75,6 +75,27 @@ class Settings(BaseSettings):
     WHATSAPP_SUPPORT_NUMBER: str = ""
     LOG_LEVEL: str = "INFO"
 
+    # ---- Admin dashboard ----
+    ADMIN_USERNAME: str = "admin"
+    ADMIN_PASSWORD: str = "change-me-please"
+    ADMIN_JWT_SECRET: str = "change-this-to-a-long-random-string"
+    ADMIN_JWT_EXP_HOURS: int = 24
+    # Comma-separated ISO country codes that count as "valid" traffic
+    # (clicks/impressions from anywhere else, or from VPN/proxy, are ignored
+    # in the dashboard metrics). Default Kuwait only.
+    ADMIN_VALID_COUNTRIES: str = "KW"
+    # When true, missing MaxMind credentials are treated as a successful
+    # geo-lookup (helpful for local dev). In production set to false.
+    ADMIN_ALLOW_UNVERIFIED_GEO: bool = True
+
+    @property
+    def admin_valid_countries_list(self) -> List[str]:
+        return [
+            c.strip().upper()
+            for c in self.ADMIN_VALID_COUNTRIES.split(",")
+            if c.strip()
+        ]
+
     @property
     def test_phones_list(self) -> List[str]:
         return [p.strip() for p in self.MAXMIND_ALLOW_TEST_PHONES.split(",") if p.strip()]

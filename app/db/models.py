@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from sqlalchemy import Column, String, Boolean, Numeric, DateTime, ForeignKey, Text, JSON
+from sqlalchemy import Column, String, Boolean, Numeric, DateTime, ForeignKey, Text, JSON, Index
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from app.db.session import Base
@@ -40,6 +40,12 @@ class Order(Base):
     user_agent = Column(Text, nullable=True)
     event_id = Column(String, nullable=True)
 
+    # Session + geo enrichment (joined on session_id with clicks)
+    session_id = Column(String, nullable=True, index=True)
+    country_code = Column(String(2), nullable=True, index=True)
+    is_vpn = Column(Boolean, default=False)
+    is_valid_traffic = Column(Boolean, default=True, index=True)
+
     fraud_decision = Column(String, nullable=True)
     fraud_reason = Column(String, nullable=True)
     maxmind_risk_score = Column(Numeric(5, 2), nullable=True)
@@ -47,7 +53,10 @@ class Order(Base):
 
     sheet_sync_status = Column(String, default="pending")
 
-    created_at = Column(DateTime, default=datetime.utcnow)
+    # Admin-managed fulfillment notes / status history (free text)
+    admin_notes = Column(Text, nullable=True)
+
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     items = relationship("OrderItem", back_populates="order", cascade="all, delete-orphan")
@@ -83,3 +92,44 @@ class EventLog(Base):
     success = Column(Boolean, default=False)
 
     created_at = Column(DateTime, default=datetime.utcnow)
+
+
+class Click(Base):
+    """A page-view / landing event used for conversion-rate analytics.
+
+    Only events from valid traffic (allowed countries + not VPN/proxy) are
+    persisted; everything else is dropped at the tracking endpoint so the
+    admin dashboard sees clean numbers.
+    """
+    __tablename__ = "clicks"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    session_id = Column(String, nullable=False, index=True)
+    visitor_id = Column(String, nullable=True, index=True)
+    client_ip = Column(String, nullable=True)
+    user_agent = Column(Text, nullable=True)
+    referrer = Column(Text, nullable=True)
+    landing_page_url = Column(Text, nullable=True)
+    page_path = Column(String, nullable=True)
+
+    country_code = Column(String(2), nullable=True, index=True)
+    is_vpn = Column(Boolean, default=False, index=True)
+    is_valid_traffic = Column(Boolean, default=True, index=True)
+    maxmind_risk_score = Column(Numeric(5, 2), nullable=True)
+
+    utm_source = Column(String, nullable=True, index=True)
+    utm_medium = Column(String, nullable=True)
+    utm_campaign = Column(String, nullable=True, index=True)
+    utm_content = Column(String, nullable=True)
+    utm_term = Column(String, nullable=True)
+
+    fbp = Column(String, nullable=True)
+    fbc = Column(String, nullable=True)
+    ttclid = Column(String, nullable=True)
+    sc_click_id = Column(String, nullable=True)
+
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)
+
+
+Index("ix_orders_created_at_valid", Order.created_at, Order.is_valid_traffic)
+Index("ix_clicks_created_at_valid", Click.created_at, Click.is_valid_traffic)

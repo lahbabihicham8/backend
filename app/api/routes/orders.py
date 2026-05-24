@@ -10,7 +10,7 @@ from app.db.models import Order, OrderItem
 from app.schemas.orders import OrderCreate, OrderResponse, UpsellResponse, PublicOrderResponse
 from app.services.phone import normalize_kuwait_phone
 from app.services.catalog import get_offer_details
-from app.services.maxmind import inspect_order
+from app.services.maxmind import inspect_order, lookup_ip, is_valid_traffic
 from app.services.sheets import send_to_sheets
 from app.services.capi_meta import send_meta_event
 from app.services.capi_tiktok import send_tiktok_event
@@ -60,9 +60,18 @@ async def create_order(
 
     total = subtotal # No shipping fee for now
 
-    # 3. Fraud Check
+    # 3. Fraud Check + light IP enrichment (so the dashboard can filter)
     client_ip = get_client_ip(request)
     user_agent = request.headers.get("User-Agent", "")
+
+    # Cheap IP classification — re-uses MaxMind insights when configured.
+    ip_lookup = lookup_ip(client_ip, user_agent)
+    country_code = (ip_lookup.country_code or "").upper() or None
+    order_is_vpn = bool(ip_lookup.is_vpn or ip_lookup.is_proxy or ip_lookup.is_hosting)
+    order_is_valid_traffic = is_valid_traffic(ip_lookup)
+    if is_test_phone:
+        # Test phones always count as valid for dashboard sanity.
+        order_is_valid_traffic = True
 
     order_number = f"KH-{datetime.utcnow().strftime('%Y%m')}-{uuid.uuid4().hex[:6].upper()}"
 
@@ -122,6 +131,10 @@ async def create_order(
             client_ip=client_ip,
             user_agent=user_agent,
             event_id=order_in.event_id,
+            session_id=order_in.session_id,
+            country_code=country_code,
+            is_vpn=order_is_vpn,
+            is_valid_traffic=order_is_valid_traffic,
             fraud_decision=str(fraud_decision),
             fraud_reason=fraud_reason,
             maxmind_risk_score=maxmind_risk_score,

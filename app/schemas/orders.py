@@ -16,6 +16,7 @@ class OrderCreate(BaseModel):
     payment_method: str = "COD"
     event_id: str
     landing_page_url: Optional[str] = None
+    session_id: Optional[str] = None
 
     utm_source: Optional[str] = None
     utm_medium: Optional[str] = None

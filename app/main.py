@@ -1,14 +1,16 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+from app.api.routes import admin, admin_dashboard, health, orders, tracking
 from app.core.config import settings
-from app.api.routes import admin, health, orders
+
 
 app = FastAPI(
     title=settings.APP_NAME,
-    openapi_url="/openapi.json"
+    openapi_url="/openapi.json",
 )
 
-# Set up CORS
+# CORS
 origins = [origin.strip() for origin in settings.CORS_ORIGINS.split(",") if origin.strip()]
 for origin in [
     "https://getkhafeefa.shop",
@@ -27,7 +29,10 @@ app.add_middleware(
 
 app.include_router(health.router, prefix="/health", tags=["health"])
 app.include_router(orders.router, prefix="/v1/orders", tags=["orders"])
-app.include_router(admin.router, prefix="/v1/admin", tags=["admin"])
+app.include_router(tracking.router, prefix="/v1/track", tags=["tracking"])
+app.include_router(admin.router, prefix="/v1/admin", tags=["admin-diagnostics"])
+app.include_router(admin_dashboard.router, prefix="/v1/admin", tags=["admin-dashboard"])
+
 
 @app.get("/")
 def root():
